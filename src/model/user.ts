@@ -43,11 +43,11 @@ export default class UserStore {
     }
 
     //show specific user
-    async show(id:number):Promise<User>{
+    async show(id: number): Promise<User> {
         try {
             const connection = await (client as Pool).connect();
             const sql = "SELECT * FROM users WHERE id=$1";
-            const result = await connection.query(sql,[id]);
+            const result = await connection.query(sql, [id]);
             connection.release();
 
             return result.rows[0];

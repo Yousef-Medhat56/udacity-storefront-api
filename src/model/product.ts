@@ -4,14 +4,14 @@ import client from "../database";
 //create type Product
 export type Product = {
     id?: number;
-    name:string,
-    price:number,
-    category:string
+    name: string;
+    price: number;
+    category: string;
 };
 
-export default class ProductStore{
+export default class ProductStore {
     //create new product
-    async create(newProduct:Product):Promise<Product>{
+    async create(newProduct: Product): Promise<Product> {
         try {
             const connection = await (client as Pool).connect();
             const sql =
@@ -43,11 +43,11 @@ export default class ProductStore{
     }
 
     //show specific user
-    async show(id:number):Promise<Product>{
+    async show(id: number): Promise<Product> {
         try {
             const connection = await (client as Pool).connect();
             const sql = "SELECT * FROM products WHERE id=$1";
-            const result = await connection.query(sql,[id]);
+            const result = await connection.query(sql, [id]);
             connection.release();
 
             return result.rows[0];
