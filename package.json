@@ -5,9 +5,10 @@
   "main": "server.ts",
   "scripts": {
     "dev": "nodemon src/server",
-    "start": "npm run build && node dist/server",
     "build": "npx tsc",
-    "test": "npm run build && jasmine"
+    "start": "npm run build && node dist/server",
+    "test": "npm run build && jasmine",
+    "prettier": "prettier --config .prettierrc  \"src/**/*.ts\" --write"
   },
   "author": "Udacity",
   "license": "ISC",
@@ -27,6 +28,7 @@
     "jasmine": "^4.3.0",
     "jasmine-spec-reporter": "^7.0.0",
     "nodemon": "^2.0.19",
+    "prettier": "^2.7.1",
     "supertest": "^6.2.4",
     "ts-node": "^10.6.0"
   }
