@@ -19,4 +19,9 @@ describe("Test User Model", () => {
         const data = await store.index();
         expect(data).toContain({ id: 1, ...dummyUser });
     });
+
+    it("Test (show) method", async () => {
+        const data = await store.show(1);
+        expect(data).toEqual(jasmine.objectContaining({ id: 1 }));
+    });
 });
