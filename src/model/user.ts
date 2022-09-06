@@ -41,4 +41,18 @@ export default class UserStore {
             throw new Error(`Could not get users. Error: ${error}`);
         }
     }
+
+    //show specific user
+    async show(id:number):Promise<User>{
+        try {
+            const connection = await (client as Pool).connect();
+            const sql = "SELECT * FROM users WHERE id=$1";
+            const result = await connection.query(sql,[id]);
+            connection.release();
+
+            return result.rows[0];
+        } catch (error) {
+            throw new Error(`Could not get user. Error: ${error}`);
+        }
+    }
 }
