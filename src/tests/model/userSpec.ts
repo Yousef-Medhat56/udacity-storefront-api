@@ -1,7 +1,11 @@
-import UserStore from "../../../model/user";
+import UserStore, { User } from "../../model/user";
 
-//import dummy data
-import { dummyUser } from "./dummydata";
+//create dummy user
+const dummyUser: User = {
+    first_name: "Gon",
+    last_name: "Freecs",
+    password: "gon passowrd",
+};
 
 describe("Test User Model", () => {
     const store = new UserStore();
