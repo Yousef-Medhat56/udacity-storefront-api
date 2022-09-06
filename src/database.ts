@@ -6,7 +6,7 @@ dotenv.config();
 const { DEV_DB, TEST_DB, DB_USER, DB_PASSWORD, ENV } = process.env;
 
 let client: Pool | undefined;
-
+console.log(ENV);
 if (ENV === "test") {
     client = new Pool({
         host: "127.0.0.1",
