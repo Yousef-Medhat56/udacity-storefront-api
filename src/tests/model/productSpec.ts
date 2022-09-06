@@ -14,4 +14,9 @@ describe("Test Product Model", () => {
         const data = await store.create(dummyProduct);
         expect(data).toEqual(jasmine.objectContaining(dummyProduct));
     });
+
+    it("Test (index) method", async () => {
+        const data = await store.index();
+        expect(data).toContain({ id: 1, ...dummyProduct });
+    });
 });
