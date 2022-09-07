@@ -27,7 +27,6 @@ export default function testOrderModel() {
 
         it("Test (update) method", async () => {
             const data = await store.update(1);
-            console.log(data);
             expect(data).toEqual(
                 jasmine.objectContaining({ status: "completed" })
             );

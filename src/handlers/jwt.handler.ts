@@ -6,7 +6,7 @@ export default class JwtHandler {
     private secret: string | undefined = process.env.TOKEN_SECRET;
 
     //sign new token
-    sign(payload:object): string {
+    sign(payload: object): string {
         const token = jwt.sign(payload, this.secret as string);
         return token;
     }

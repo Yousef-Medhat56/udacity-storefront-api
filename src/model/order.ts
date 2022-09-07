@@ -57,7 +57,8 @@ export default class OrderStore {
     async update(id: number): Promise<Order> {
         try {
             const connection = await (client as Pool).connect();
-            const sql = "UPDATE orders SET status = 'completed' WHERE id = $1 RETURNING *";
+            const sql =
+                "UPDATE orders SET status = 'completed' WHERE id = $1 RETURNING *";
             const result = await connection.query(sql, [id]);
             return result.rows[0];
         } catch (error) {
