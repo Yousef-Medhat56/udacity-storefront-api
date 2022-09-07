@@ -52,4 +52,16 @@ export default class OrderStore {
             throw new Error(`Could not create ProductOrder. Error: ${error}`);
         }
     }
+
+    //update order
+    async update(id: number): Promise<Order> {
+        try {
+            const connection = await (client as Pool).connect();
+            const sql = "UPDATE orders SET status = 'completed' WHERE id = $1 RETURNING *";
+            const result = await connection.query(sql, [id]);
+            return result.rows[0];
+        } catch (error) {
+            throw new Error(`Could not update order. Error: ${error}`);
+        }
+    }
 }
