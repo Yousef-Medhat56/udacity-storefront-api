@@ -6,8 +6,14 @@ export default class JwtHandler {
     private secret: string | undefined = process.env.TOKEN_SECRET;
 
     //sign new token
-    sign(id: number): string {
-        const token = jwt.sign({ id }, this.secret as string);
+    sign(payload:object): string {
+        const token = jwt.sign(payload, this.secret as string);
         return token;
+    }
+
+    //decode the token
+    decode(token: string) {
+        const decoded = jwt.verify(token, this.secret as string);
+        return decoded;
     }
 }
