@@ -14,4 +14,12 @@ export default class PasswordHandler {
         );
         return hash;
     }
+
+    //compare password
+    compare(incomingPassword: string, hashedPassword: string): boolean {
+        return bcrypt.compareSync(
+            incomingPassword + this.pepper,
+            hashedPassword
+        );
+    }
 }
