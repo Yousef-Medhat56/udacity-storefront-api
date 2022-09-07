@@ -4,10 +4,12 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "dev": "nodemon src/server",
+    "dev": "npm run migrate-up && nodemon src/server",
     "build": "npx tsc",
     "start": "npm run build && node dist/server",
     "test": "set ENV=test&& db-migrate up -e test && npm run build && jasmine && db-migrate reset -e test",
+    "migrate-up":"db-migrate up -e dev",
+    "migrate-down":"db-migrate reset -e dev",
     "prettier": "prettier --config .prettierrc  \"src/**/*.ts\" --write",
     "lint": "eslint . --ext .ts"
   },
