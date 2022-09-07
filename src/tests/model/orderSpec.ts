@@ -24,5 +24,13 @@ export default function testOrderModel() {
             const data = await store.createProductOrder(dummyProductOrder);
             expect(data).toEqual(jasmine.objectContaining(dummyProductOrder));
         });
+
+        it("Test (update) method", async () => {
+            const data = await store.update(1);
+            console.log(data);
+            expect(data).toEqual(
+                jasmine.objectContaining({ status: "completed" })
+            );
+        });
     });
 }
