@@ -35,17 +35,21 @@ export default class OrderStore {
     async createProductOrder(
         newProductOrder: ProductOrder
     ): Promise<ProductOrder> {
-        const connection = await (client as Pool).connect();
-        const sql =
-            "INSERT INTO products_orders(order_id,product_id,quantity) VALUES($1,$2,$3) RETURNING *";
+        try {
+            const connection = await (client as Pool).connect();
+            const sql =
+                "INSERT INTO products_orders(order_id,product_id,quantity) VALUES($1,$2,$3) RETURNING *";
 
-        // destruct newProductOrder object
-        const { order_id, product_id, quantity } = newProductOrder;
-        const result = await connection.query(sql, [
-            order_id,
-            product_id,
-            quantity,
-        ]);
-        return result.rows[0];
+            // destruct newProductOrder object
+            const { order_id, product_id, quantity } = newProductOrder;
+            const result = await connection.query(sql, [
+                order_id,
+                product_id,
+                quantity,
+            ]);
+            return result.rows[0];
+        } catch (error) {
+            throw new Error(`Could not create ProductOrder. Error: ${error}`);
+        }
     }
 }
