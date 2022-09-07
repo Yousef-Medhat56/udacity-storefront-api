@@ -11,10 +11,8 @@ export default function testOrderModel() {
 
         it("Test (create) method", async () => {
             const data = await store.create(dummyOrder);
-            
-            expect(data).toEqual(
-                jasmine.objectContaining(dummyOrder)
-            );
+
+            expect(data).toEqual(jasmine.objectContaining(dummyOrder));
         });
     });
 }
