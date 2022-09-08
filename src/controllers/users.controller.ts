@@ -36,6 +36,23 @@ class UsersController {
             res.status(500).json({ error: "Internal Server Error" });
         }
     }
+
+    //get a specific user
+    async show(req: Request, res: Response) {
+        try {
+            const { id } = req.params; //user id
+
+            //get the user from the users table
+            const data = await store.show(parseInt(id));
+
+            //if the user exists, send the data to the client
+            if (data) res.json({ data });
+            //else, send 404 error
+            else res.status(404).json({ error: "User doesn't exist" });
+        } catch (error) {
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    }
 }
 
 export default UsersController;
