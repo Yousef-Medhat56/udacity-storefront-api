@@ -1,6 +1,9 @@
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 
+//import routes
+import usersRoute from "./routes/users.route"
+
 const app: express.Application = express();
 const address = "0.0.0.0:3000";
 
@@ -13,5 +16,8 @@ app.get("/", function (req: Request, res: Response) {
 app.listen(3000, function () {
     console.log(`starting app on: ${address}`);
 });
+
+//Routes
+app.use("/users",usersRoute)
 
 export default app;
