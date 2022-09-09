@@ -18,7 +18,11 @@ export default function testUserModel() {
 
         it("Test (index) method", async () => {
             const data = await store.index();
-            expect(data).toContain({ id: 1, ...dummyUser });
+            expect(data).toContain(
+                jasmine.objectContaining({
+                    id: 1,
+                })
+            );
         });
 
         it("Test (show) method", async () => {
