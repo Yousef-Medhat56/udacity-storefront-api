@@ -15,6 +15,16 @@ class ProductsController {
             res.status(500).json({ error: "Internal Server Error" });
         }
     }
+
+    //get all the products
+    async index(_req: Request, res: Response) {
+        try {
+            const data = await store.index();
+            res.json({ data });
+        } catch (error) {
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    }
 }
 
 export default ProductsController;

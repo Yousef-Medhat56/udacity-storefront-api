@@ -24,4 +24,7 @@ router.post(
     controller.create
 );
 
+//get all the products
+router.get("/", controller.index);
+
 export default router
