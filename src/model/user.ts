@@ -15,7 +15,7 @@ export default class UserStore {
         try {
             const connection = await (client as Pool).connect();
             const sql =
-                "INSERT INTO users(first_name,last_name,password) VALUES($1,$2,$3) RETURNING *";
+                "INSERT INTO users(first_name,last_name,password) VALUES($1,$2,$3) RETURNING id,first_name,last_name";
             const result = await connection.query(sql, [
                 newUser.first_name,
                 newUser.last_name,

@@ -2,8 +2,10 @@ import { Request, Response } from "express";
 import UserStore, { User } from "../model/user";
 import PasswordHandler from "../handlers/password.handler";
 import JwtHandler from "../handlers/jwt.handler";
+import UserServices from "../services/users.service";
 
 const store = new UserStore(); //user model
+const services = new UserServices(); //user services
 const password = new PasswordHandler(); //password handler
 const jwt = new JwtHandler(); //JWT handler
 
@@ -17,12 +19,12 @@ class UsersController {
             const hashedPassword = password.hash(user.password);
             user.password = hashedPassword;
 
-            //add the new user to the users table
-            const data = await store.create(user);
+            //add the new user to the users table and create a new order for him
+            const data = await services.createUserWithOrder(user);
 
             //sign the user token
             const token = jwt.sign({ id: data.id });
-            res.json({ token });
+            res.json({ data, token });
         } catch (error) {
             res.status(500).json({ error: "Internal Server Error" });
         }
