@@ -2,8 +2,10 @@ import { Request, Response } from "express";
 
 //orders services
 import OrderServices from "../services/orders.service";
+import ProductServices from "../services/products.service";
 
 const orderServices = new OrderServices();
+const productServices = new ProductServices();
 
 class ServicesController {
     async controlCompleteOrder(_req: Request, res: Response) {
@@ -31,13 +33,19 @@ class ServicesController {
                     products: productsInOrder,
                 },
             });
-        } 
+        }
         // if the order doesn't contain products
         else {
             res.status(400).json({
                 error: "you haven't ordered any products yet",
             });
         }
+    }
+
+    //get top 5 most popular products
+    async getTopProducts(_req: Request, res: Response) {
+        const data = await productServices.getTop5Products();
+        res.json({ data });
     }
 }
 

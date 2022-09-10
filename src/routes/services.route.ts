@@ -7,4 +7,7 @@ const router = Router();
 //complete the order (chnage order status to "completed")
 router.put("/order-completed", verifyToken, controller.controlCompleteOrder);
 
+//get top 5 most popular products
+router.get("/top-products", controller.getTopProducts);
+
 export default router;
