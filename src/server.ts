@@ -3,9 +3,9 @@ import bodyParser from "body-parser";
 
 //import routes
 import usersRoute from "./routes/users.route";
-import productsRoute from "./routes/products.route"
-import OrdersRoute from "./routes/orders.route"
-import ServicesRoute from "./routes/services.route"
+import productsRoute from "./routes/products.route";
+import OrdersRoute from "./routes/orders.route";
+import ServicesRoute from "./routes/services.route";
 
 const app: express.Application = express();
 const address = "0.0.0.0:3000";
@@ -22,8 +22,8 @@ app.listen(3000, function () {
 
 //Routes
 app.use("/users", usersRoute);
-app.use("/products",productsRoute)
-app.use("/orders",OrdersRoute)
-app.use("/",ServicesRoute)
+app.use("/products", productsRoute);
+app.use("/orders", OrdersRoute);
+app.use("/", ServicesRoute);
 
 export default app;

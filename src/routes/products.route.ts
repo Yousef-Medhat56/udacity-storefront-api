@@ -28,10 +28,5 @@ router.post(
 router.get("/", controller.index);
 
 // get a specific product by id
-router.get(
-    "/:id",
-    idParamValidationRules(),
-    validate,
-    controller.show
-);
+router.get("/:id", idParamValidationRules(), validate, controller.show);
 export default router;

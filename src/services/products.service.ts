@@ -24,7 +24,6 @@ class ProductServices extends ProductStore {
 
     // get top 5 most popular products
     async getTop5Products() {
-        
         const sql = `SELECT product_id,name,category,price,SUM(quantity)::INTEGER AS sold_quantity from (SELECT * FROM products_orders 
             JOIN products ON products_orders.product_id=products.id) AS data 
             GROUP BY product_id,name,price,category ORDER BY sold_quantity DESC LIMIT 5`;
