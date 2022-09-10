@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import client from "../database";
+import Store from "./store";
 
 //create type Order
 export type Order = {
@@ -16,7 +17,7 @@ export type ProductOrder = {
     quantity: number;
 };
 
-export default class OrderStore {
+class OrderStore extends Store{
     //create new order
     async create(user_id:number): Promise<Order> {
         try {
@@ -92,3 +93,6 @@ export default class OrderStore {
         }
     }
 }
+
+
+export default OrderStore;
