@@ -1,5 +1,3 @@
-import { Pool } from "pg";
-import client from "../database";
 import Store from "./store";
 
 //create type Order
@@ -17,16 +15,14 @@ export type ProductOrder = {
     quantity: number;
 };
 
-class OrderStore extends Store{
+class OrderStore extends Store {
     //create new order
-    async create(user_id:number): Promise<Order> {
+    async create(user_id: number): Promise<Order> {
         try {
-            const connection = await (client as Pool).connect();
             const sql =
                 "INSERT INTO orders(user_id,status) VALUES($1,'active') RETURNING *";
-            const result = await connection.query(sql, [user_id]);
-            connection.release();
-            return result.rows[0];
+            const result = await this.query(sql, [user_id]);
+            return result[0];
         } catch (error) {
             throw new Error(`Could not create order. Error: ${error}`);
         }
@@ -35,11 +31,10 @@ class OrderStore extends Store{
     //update order
     async update(order_id: number): Promise<Order> {
         try {
-            const connection = await (client as Pool).connect();
             const sql =
                 "UPDATE orders SET status = 'completed' WHERE id = $1 RETURNING *";
-            const result = await connection.query(sql, [order_id]);
-            return result.rows[0];
+            const result = await this.query(sql, [order_id]);
+            return result[0];
         } catch (error) {
             throw new Error(`Could not update order. Error: ${error}`);
         }
@@ -50,18 +45,17 @@ class OrderStore extends Store{
         newProductOrder: ProductOrder
     ): Promise<ProductOrder> {
         try {
-            const connection = await (client as Pool).connect();
             const sql =
                 "INSERT INTO products_orders(order_id,product_id,quantity) VALUES($1,$2,$3) RETURNING *";
 
             // destruct newProductOrder object
             const { order_id, product_id, quantity } = newProductOrder;
-            const result = await connection.query(sql, [
+            const result = await this.query(sql, [
                 order_id,
                 product_id,
                 quantity,
             ]);
-            return result.rows[0];
+            return result[0];
         } catch (error) {
             throw new Error(`Could not create ProductOrder. Error: ${error}`);
         }
@@ -72,20 +66,19 @@ class OrderStore extends Store{
         newProductOrder: ProductOrder
     ): Promise<ProductOrder> {
         try {
-            const connection = await (client as Pool).connect();
             const sql =
                 "UPDATE products_orders SET quantity = $3 WHERE order_id=$1 AND product_id=$2 RETURNING *";
 
             // destruct newProductOrder object
             const { order_id, product_id, quantity } = newProductOrder;
-            const result = await connection.query(sql, [
+            const result = await this.query(sql, [
                 order_id,
                 product_id,
                 quantity,
             ]);
             //if there are results, return it
-            if (result.rows.length) {
-                return result.rows[0];
+            if (result.length) {
+                return result[0];
             }
             throw new Error();
         } catch (error) {
@@ -93,6 +86,5 @@ class OrderStore extends Store{
         }
     }
 }
-
 
 export default OrderStore;

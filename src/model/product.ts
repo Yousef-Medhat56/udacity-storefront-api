@@ -1,5 +1,3 @@
-import { Pool } from "pg";
-import client from "../database";
 import Store from "./store";
 
 //create type Product
@@ -14,17 +12,14 @@ class ProductStore extends Store {
     //create new product
     async create(newProduct: Product): Promise<Product> {
         try {
-            const connection = await (client as Pool).connect();
             const sql =
                 "INSERT INTO products(name,price,category) VALUES($1,$2,$3) RETURNING *";
-            const result = await connection.query(sql, [
+            const result = await this.query(sql, [
                 newProduct.name,
                 newProduct.price,
                 newProduct.category,
             ]);
-
-            connection.release();
-            return result.rows[0];
+            return result[0];
         } catch (error) {
             throw new Error(`Could not create product. Error: ${error}`);
         }
@@ -33,11 +28,9 @@ class ProductStore extends Store {
     //get products
     async index(): Promise<Product[]> {
         try {
-            const connection = await (client as Pool).connect();
             const sql = "SELECT * FROM products";
-            const result = await connection.query(sql);
-            connection.release();
-            return result.rows;
+            const result = await this.query(sql);
+            return result;
         } catch (error) {
             throw new Error(`Could not get products. Error: ${error}`);
         }
@@ -46,12 +39,9 @@ class ProductStore extends Store {
     //show specific user
     async show(id: number): Promise<Product> {
         try {
-            const connection = await (client as Pool).connect();
             const sql = "SELECT * FROM products WHERE id=$1";
-            const result = await connection.query(sql, [id]);
-            connection.release();
-
-            return result.rows[0];
+            const result = await this.query(sql, [id]);
+            return result[0];
         } catch (error) {
             throw new Error(`Could not get product. Error: ${error}`);
         }
