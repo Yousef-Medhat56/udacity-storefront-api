@@ -13,7 +13,9 @@ export default function testUserModel() {
 
         it("Test (create) method", async () => {
             const data = await store.create(dummyUser);
-            expect(data).toEqual(jasmine.objectContaining(dummyUser));
+            expect(data).toEqual(
+                jasmine.objectContaining({ first_name: dummyUser.first_name })
+            );
         });
 
         it("Test (index) method", async () => {

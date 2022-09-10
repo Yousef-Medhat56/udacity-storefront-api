@@ -9,18 +9,17 @@ class UserServices extends UserStore {
         id: number | undefined;
         first_name: string;
         last_name: string;
-        order: { order_id: number | undefined; status: string };
     }> {
         try {
             //create new user
             const { id, first_name, last_name } = await this.create(newUser);
 
             //create new active order for the new user
-            const { id: order_id, status } = await orderStore.create({
+            await orderStore.create({
                 user_id: id as number,
                 status: "active",
             });
-            return { id, first_name, last_name, order: { order_id, status } };
+            return { id, first_name, last_name };
         } catch (error) {
             throw new Error(`Error: ${error}`);
         }
