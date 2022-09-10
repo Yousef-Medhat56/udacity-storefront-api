@@ -6,7 +6,7 @@ class OrderServices extends OrderStore {
     //get the order id using the user id
     async getOrderIdByUserId(user_id: number): Promise<number> {
         const connection = await (client as Pool).connect();
-        const sql = "SELECT id FROM orders WHERE user_id =$1";
+        const sql = "SELECT id FROM orders WHERE user_id =$1 ORDER BY id DESC";
         const result = await connection.query(sql, [user_id]);
         connection.release();
         return result.rows[0].id;
@@ -40,6 +40,14 @@ class OrderServices extends OrderStore {
         const result = await connection.query(sql, [order_id]);
         connection.release();
         return result.rows;
+    }
+
+    //change the order status to "completed"
+    async completeOrder(user_id:number){
+        //order id
+        const order_id = await this.getOrderIdByUserId(user_id)
+        const completedOrder = await this.update(order_id)
+        return {data:completedOrder}
     }
 }
 
