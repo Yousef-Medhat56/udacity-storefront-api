@@ -43,11 +43,50 @@ class OrderServices extends OrderStore {
     }
 
     //change the order status to "completed"
-    async completeOrder(user_id:number){
+    async completeOrder(user_id: number) {
         //order id
-        const order_id = await this.getOrderIdByUserId(user_id)
-        const completedOrder = await this.update(order_id)
-        return {data:completedOrder}
+        const order_id = await this.getOrderIdByUserId(user_id);
+        const completedOrder = await this.update(order_id);
+        return { data: completedOrder };
+    }
+
+    //get orders depending on the order status
+    async getOrdersByStatus(user_id: number, order_status: string | undefined) {
+        let sql: string | undefined; //sql query
+
+        switch (order_status) {
+            //get the current active order
+            case "active":
+                sql =
+                    "SELECT id as order_id,status from orders WHERE user_id=$1 and status = 'active'";
+                break;
+
+            //get the completed orders
+            case "completed":
+                sql =
+                    "SELECT id as order_id,status from orders WHERE user_id=$1 and status = 'completed'";
+                break;
+
+            //get all the orders
+            default:
+                sql =
+                    "SELECT id as order_id,status from orders WHERE user_id=$1";
+                break;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const ordersArr: any[] = await this.query(sql as string, [user_id]); //orders array
+        const data: unknown[] = [];
+        //itterate through each order
+        for (const order of ordersArr) {
+            //order id and order status
+            const { order_id, status } = order;
+
+            //get the products in each order
+            const productsInOrder = await this.getProductsInOrder(order_id);
+            data.push({ order_id, status, products: productsInOrder });
+        }
+
+        return data;
     }
 }
 

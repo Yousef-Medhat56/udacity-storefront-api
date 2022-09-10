@@ -24,4 +24,5 @@ router.put(
     controller.addProductToOrder
 );
 
+router.get("/", verifyToken, controller.getOrders);
 export default router;

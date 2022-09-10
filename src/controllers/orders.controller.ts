@@ -11,10 +11,10 @@ class OrdersController {
         try {
             //user id
             const user_id: number = res.locals.user_id;
-            
+
             //get the order id
             const order_id = await services.getOrderIdByUserId(user_id);
-          
+
             //product id and quantity
             const { product_id, quantity } = req.body;
 
@@ -23,10 +23,10 @@ class OrdersController {
 
             //product ids in the current order
             const productIds = await services.getProductIdsBtOrderId(order_id);
-            
+
             //check if the user has ordered this product before or not
             const isOrderedProduct = productIds.includes(product_id);
-            
+
             //if the user has already ordered the product
             if (isOrderedProduct) {
                 await store.updateProductOrder(productOrderRecord);
@@ -42,6 +42,17 @@ class OrdersController {
         } catch (error) {
             res.status(400).json({ error: "Product doesn't exist" });
         }
+    }
+
+    //get orders
+    async getOrders(req: Request, res: Response) {
+        //user id
+        const user_id: number = res.locals.user_id;
+
+        //order status
+        const status = req.query.status as string;
+        const data = await services.getOrdersByStatus(user_id, status);
+        res.json({ data });
     }
 }
 
