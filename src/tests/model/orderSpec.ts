@@ -16,7 +16,7 @@ export default function testOrderModel() {
         const store = new OrderStore();
 
         it("Test (create) method", async () => {
-            const data = await store.create(dummyOrder);
+            const data = await store.create(dummyOrder.user_id);
             expect(data).toEqual(jasmine.objectContaining(dummyOrder));
         });
 

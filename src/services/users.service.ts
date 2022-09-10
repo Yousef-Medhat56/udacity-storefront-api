@@ -15,10 +15,7 @@ class UserServices extends UserStore {
             const { id, first_name, last_name } = await this.create(newUser);
 
             //create new active order for the new user
-            await orderStore.create({
-                user_id: id as number,
-                status: "active",
-            });
+            await orderStore.create(id as number);
             return { id, first_name, last_name };
         } catch (error) {
             throw new Error(`Error: ${error}`);

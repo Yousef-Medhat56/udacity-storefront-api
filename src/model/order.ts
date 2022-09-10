@@ -18,12 +18,12 @@ export type ProductOrder = {
 
 export default class OrderStore {
     //create new order
-    async create(newOrder: Order): Promise<Order> {
+    async create(user_id:number): Promise<Order> {
         try {
             const connection = await (client as Pool).connect();
             const sql =
                 "INSERT INTO orders(user_id,status) VALUES($1,'active') RETURNING *";
-            const result = await connection.query(sql, [newOrder.user_id]);
+            const result = await connection.query(sql, [user_id]);
             connection.release();
             return result.rows[0];
         } catch (error) {
