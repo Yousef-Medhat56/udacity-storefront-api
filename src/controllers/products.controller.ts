@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import ProductStore, { Product } from "../model/product";
+import ProductServices from "../services/products.service";
 
 const store = new ProductStore(); //product model
+const service = new ProductServices(); //products services
 
 class ProductsController {
     //create new product
@@ -17,10 +19,18 @@ class ProductsController {
     }
 
     //get all the products
-    async index(_req: Request, res: Response) {
+    async index(req: Request, res: Response) {
         try {
-            const data = await store.index();
-            res.json({ data });
+            //product category
+            const category = req.query.category as string;
+            const data = await service.getProducts(category);
+            const { error } = data as { error: string };
+            //if the category doesn't exist
+            if (error)
+                res.status(404).json({
+                    error,
+                });
+            else res.json({ data });
         } catch (error) {
             res.status(500).json({ error: "Internal Server Error" });
         }

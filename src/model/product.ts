@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import client from "../database";
+import Store from "./store";
 
 //create type Product
 export type Product = {
@@ -9,7 +10,7 @@ export type Product = {
     category: string;
 };
 
-export default class ProductStore {
+class ProductStore extends Store {
     //create new product
     async create(newProduct: Product): Promise<Product> {
         try {
@@ -56,3 +57,5 @@ export default class ProductStore {
         }
     }
 }
+
+export default ProductStore;
