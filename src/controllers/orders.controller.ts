@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import OrderStore from "../model/order";
+
 import OrderServices from "../services/orders.service";
 
-const store = new OrderStore(); //order model
 const services = new OrderServices(); //order service
 
 class OrdersController {
@@ -29,11 +28,11 @@ class OrdersController {
 
             //if the user has already ordered the product
             if (isOrderedProduct) {
-                await store.updateProductOrder(productOrderRecord);
+                await services.updateProductOrder(productOrderRecord);
             }
             //if the user order the product for the first time
             else {
-                await store.createProductOrder(productOrderRecord);
+                await services.createProductOrder(productOrderRecord);
             }
 
             //get all the products in the order

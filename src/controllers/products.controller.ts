@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
-import ProductStore, { Product } from "../model/product";
+import { Product } from "../model/product";
 import ProductServices from "../services/products.service";
 
-const store = new ProductStore(); //product model
-const service = new ProductServices(); //products services
+const services = new ProductServices(); //products services
 
 class ProductsController {
     //create new product
@@ -11,7 +10,7 @@ class ProductsController {
         try {
             const product: Product = req.body;
             //add the new product to the products table
-            const data = await store.create(product);
+            const data = await services.create(product);
             res.json({ data });
         } catch (error) {
             res.status(500).json({ error: "Internal Server Error" });
@@ -23,7 +22,7 @@ class ProductsController {
         try {
             //product category
             const category = req.query.category as string;
-            const data = await service.getProducts(category);
+            const data = await services.getProducts(category);
             const { error } = data as { error: string };
             //if the category doesn't exist
             if (error)
@@ -42,7 +41,7 @@ class ProductsController {
             const { id } = req.params; //product id
 
             //get the product from the product table
-            const data = await store.show(parseInt(id));
+            const data = await services.show(parseInt(id));
 
             //if the product exists, send the data to the client
             if (data) res.json({ data });

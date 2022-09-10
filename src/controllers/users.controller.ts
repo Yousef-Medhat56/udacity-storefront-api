@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
-import UserStore, { User } from "../model/user";
+import { User } from "../model/user";
 import PasswordHandler from "../handlers/password.handler";
 import JwtHandler from "../handlers/jwt.handler";
 import UserServices from "../services/users.service";
 
-const store = new UserStore(); //user model
 const services = new UserServices(); //user services
 const password = new PasswordHandler(); //password handler
 const jwt = new JwtHandler(); //JWT handler
@@ -32,7 +31,7 @@ class UsersController {
     //get all the users
     async index(_req: Request, res: Response) {
         try {
-            const data = await store.index();
+            const data = await services.index();
             res.json({ data });
         } catch (error) {
             res.status(500).json({ error: "Internal Server Error" });
@@ -45,7 +44,7 @@ class UsersController {
             const { id } = req.params; //user id
 
             //get the user from the users table
-            const data = await store.show(parseInt(id));
+            const data = await services.show(parseInt(id));
 
             //if the user exists, send the data to the client
             if (data) res.json({ data });
