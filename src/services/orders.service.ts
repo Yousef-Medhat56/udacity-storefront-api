@@ -30,6 +30,17 @@ class OrderServices extends OrderStore {
 
         return productIds;
     }
+
+    //return array of products in the order
+    async getProductsInOrder(order_id: number) {
+        const connection = await (client as Pool).connect();
+        const sql = `SELECT product_id, name AS product_name,category as product_category,price AS product_price,quantity FROM products_orders 
+            JOIN products ON products.id=products_orders.product_id AND products_orders.order_id = $1`;
+
+        const result = await connection.query(sql, [order_id]);
+        connection.release();
+        return result.rows;
+    }
 }
 
 export default OrderServices;
