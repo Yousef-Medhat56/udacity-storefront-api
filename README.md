@@ -6,9 +6,14 @@ A project for the Advanced Full-Stack Web Development Nanodegree Program offered
 
 ## Table of contents
 1. [Technologies](#technologies)
-2. [Installation and Usage](#installation-and-usage)
-3. [Scripts](#scripts)
-4. [API Documentation](#api-documentation)
+2. [Installation](#installation)
+3. [Setup](#setup)
+    1. [Database](#setup-database)
+    2. [Environment variables](#setup-env)
+    3. [Start the development environemt](#start-development)
+4. [Scripts](#scripts)
+5. [Database Shema](#database-schema)
+6. [API Documentation](#api-documentation)
      * [Users](#users)
      * [Products](#products)
      * [Orders](#orders)
@@ -20,7 +25,7 @@ A project for the Advanced Full-Stack Web Development Nanodegree Program offered
 - jsonwebtoken for working with JWTs
 - jasmine for testing
 
-## Installation and Usage
+## Installation
 You can clone the repo then install the dependencies using npm:
 ```
 $ git clone https://github.com/Yousef-Medhat56/udacity-storefront-api.git
@@ -28,6 +33,20 @@ $ cd udacity-storefront-api
 $ npm install
 ```
 
+## Setup
+The database runs on **port 5432**. <br>
+The server runs on **port 3000**.
+### <a name="setup-database">1. Setup the database</a>
+Create the development database using psql terminal.
+```
+$ CREATE DATABASE development_database_name;
+```
+Create the test database using psql terminal.
+```
+$ CREATE DATABASE test_database_name;
+```
+
+### <a name="setup-env">2. Setup environment variables</a>
 The app requires a number of environment variables for runtime configration. The following example demonstrates how to set them in your `.env` file.
 ```
 DEV_DB = development_database_name  
@@ -39,11 +58,12 @@ PASSOWRD_PEPPER = a password pepper example
 SALT_ROUNDS = 9 
 TOKEN_SECRET = a token secret example
 ```
-Start the development server. The server will run on port 3000.
+
+### <a name="start-development">3. Start the development environment</a>
+The commend below will excute the up migrations in the development database and run the development server.
 ```
 $ npm run dev
 ```
-
 ## Scripts
 `npm start` <br> 
 
@@ -77,7 +97,8 @@ Format code.
 
 Lint code.
 
-
+## Database Schema
+![database schema](https://res.cloudinary.com/dbyr5z2qi/image/upload/v1662919724/udacity/Frame_1_vjxc7b.png)
 ## API Documentation
 
 #### Authentication Requirments
