@@ -25,7 +25,7 @@ app.use("/products", productsRoute);
 app.use("/orders", OrdersRoute);
 
 //invalid routes
-app.use("*",(_req:Request,res:Response)=>{
-    res.status(404).json({error:"Not Found"})
-})
+app.use("*", (_req: Request, res: Response) => {
+    res.status(404).json({ error: "Not Found" });
+});
 export default app;

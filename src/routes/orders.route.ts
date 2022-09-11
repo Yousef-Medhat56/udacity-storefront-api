@@ -28,5 +28,5 @@ router.post(
 );
 
 //change order status to complete
-router.patch("/complete",verifyToken,controller.completeOrder)
+router.patch("/complete", verifyToken, controller.completeOrder);
 export default router;
