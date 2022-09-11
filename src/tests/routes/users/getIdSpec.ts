@@ -4,11 +4,8 @@ import app from "../../../server";
 //create request object
 const request = supertest(app);
 
-export default function testGetIdUserRoute() {
+export default function testGetIdUserRoute(token: string) {
     describe("Test: GET /users/:id", () => {
-        const token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjYyNzA4MzI5fQ.lpWXFlUFDKvNJw7FLVj2OV665Uqu-wSQuhLqpZUztNY";
-
         it("enter existed user id", async () => {
             const response = await request
                 .get("/users/1")

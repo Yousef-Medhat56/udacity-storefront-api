@@ -4,13 +4,11 @@ import app from "../../../server";
 //create request object
 const request = supertest(app);
 
-export default function testGetUserRoute() {
+export default function testGetUserRoute(
+    validToken: string,
+    inValidToken: string
+) {
     describe("Test: GET /users", () => {
-        const validToken =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjYyNzA4MzI5fQ.lpWXFlUFDKvNJw7FLVj2OV665Uqu-wSQuhLqpZUztNY";
-
-        const inValidToken = "this is an invalid token";
-
         it("send request with the a valid token in the Authorization header", async () => {
             const response = await request
                 .get("/users")
