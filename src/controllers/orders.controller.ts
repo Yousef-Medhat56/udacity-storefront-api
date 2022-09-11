@@ -28,7 +28,6 @@ class OrdersController {
 
             //if the user has already ordered the product
             if (isOrderedProduct) {
-                
                 await services.updateProductOrder(productOrderRecord);
             }
             //if the user order the product for the first time
@@ -46,46 +45,54 @@ class OrdersController {
 
     //get orders
     async getOrders(req: Request, res: Response) {
-        //user id
-        const user_id: number = res.locals.user_id;
+        try {
+            //user id
+            const user_id: number = res.locals.user_id;
 
-        //order status
-        const status = req.query.status as string;
-        const data = await services.getOrdersByStatus(user_id, status);
-        res.json({ data });
+            //order status
+            const status = req.query.status as string;
+            const data = await services.getOrdersByStatus(user_id, status);
+            res.json({ data });
+        } catch (error) {
+            res.status(500).json({ error: "Internal Server Error" });
+        }
     }
 
     async completeOrder(_req: Request, res: Response) {
-        //user id
-        const { user_id } = res.locals;
-        //order id
-        const order_id = await services.getOrderIdByUserId(user_id);
+        try {
+            //user id
+            const { user_id } = res.locals;
+            //order id
+            const order_id = await services.getOrderIdByUserId(user_id);
 
-        //get products in order
-        const productsInOrder = await services.getProductsInOrder(
-            order_id as number
-        );
+            //get products in order
+            const productsInOrder = await services.getProductsInOrder(
+                order_id as number
+            );
 
-        //if the order contains products
-        if (productsInOrder.length) {
-            //complete the order (change order status to "completed")
-            await services.completeOrder(user_id);
+            //if the order contains products
+            if (productsInOrder.length) {
+                //complete the order (change order status to "completed")
+                await services.completeOrder(user_id);
 
-            //create new active order
-            await services.create(user_id);
-            res.json({
-                data: {
-                    order_id,
-                    status: "completed",
-                    products: productsInOrder,
-                },
-            });
-        }
-        // if the order doesn't contain products
-        else {
-            res.status(400).json({
-                error: "you haven't ordered any products yet",
-            });
+                //create new active order
+                await services.create(user_id);
+                res.json({
+                    data: {
+                        order_id,
+                        status: "completed",
+                        products: productsInOrder,
+                    },
+                });
+            }
+            // if the order doesn't contain products
+            else {
+                res.status(400).json({
+                    error: "you haven't ordered any products yet",
+                });
+            }
+        } catch (error) {
+            res.status(500).json({ error: "Internal Server Error" });
         }
     }
 }

@@ -54,8 +54,12 @@ class ProductsController {
 
     //get top 5 most popular products
     async getTopProducts(_req: Request, res: Response) {
-        const data = await services.getTop5Products();
-        res.json({ data });
+        try {
+            const data = await services.getTop5Products();
+            res.json({ data });
+        } catch (error) {
+            res.status(500).json({ error: "Internal Server Error" });
+        }
     }
 }
 
