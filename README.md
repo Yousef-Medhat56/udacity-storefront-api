@@ -1,54 +1,330 @@
 # Storefront Backend Project
 
-## Getting Started
+## Overview
 
-This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.
+A project for the Advanced Full-Stack Web Development Nanodegree Program offered by EgFWD initiative and Udacity. The goal of the project is building a RESTful API for a mock online store.
 
-## Required Technologies
-Your application must make use of the following libraries:
+## Table of contents
+1. [Technologies](#technologies)
+2. [Installation and Usage](#installation-and-usage)
+3. [Scripts](#scripts)
+4. [API Documentation](#api-documentation)
+     * [Users](#users)
+     * [Products](#products)
+     * [Orders](#orders)
+
+## Technologies
 - Postgres for the database
 - Node/Express for the application logic
-- dotenv from npm for managing environment variables
-- db-migrate from npm for migrations
-- jsonwebtoken from npm for working with JWTs
-- jasmine from npm for testing
+- db-migrate for migrations
+- jsonwebtoken for working with JWTs
+- jasmine for testing
 
-## Steps to Completion
+## Installation and Usage
+You can clone the repo then install the dependencies using npm:
+```
+$ git clone https://github.com/Yousef-Medhat56/udacity-storefront-api.git
+$ cd udacity-storefront-api
+$ npm install
+```
 
-### 1. Plan to Meet Requirements
+The app requires a number of environment variables for runtime configration. The following example demonstrates how to set them in your `.env` file.
+```
+DEV_DB = development_database_name  
+TEST_DB = test_database_name 
+DB_USER = foo # database username
+DB_PASSWORD = bar 
+ENV = dev | test # development environment or test environment
+PASSOWRD_PEPPER = a password pepper example
+SALT_ROUNDS = 9 
+TOKEN_SECRET = a token secret example
+```
+Start the development server. The server will run on port 3000.
+```
+$ npm run dev
+```
 
-In this repo there is a `REQUIREMENTS.md` document which outlines what this API needs to supply for the frontend, as well as the agreed upon data shapes to be passed between front and backend. This is much like a document you might come across in real life when building or extending an API. 
+## Scripts
+`npm start` <br> 
 
-Your first task is to read the requirements and update the document with the following:
-- Determine the RESTful route for each endpoint listed. Add the RESTful route and HTTP verb to the document so that the frontend developer can begin to build their fetch requests.    
-**Example**: A SHOW route: 'blogs/:id' [GET] 
+Build the app to the `dist` directory and run the production server.
 
-- Design the Postgres database tables based off the data shape requirements. Add to the requirements document the database tables and columns being sure to mark foreign keys.   
-**Example**: You can format this however you like but these types of information should be provided
-Table: Books (id:varchar, title:varchar, author:varchar, published_year:varchar, publisher_id:string[foreign key to publishers table], pages:number)
+`npm run build` <br>
 
-**NOTE** It is important to remember that there might not be a one to one ratio between data shapes and database tables. Data shapes only outline the structure of objects being passed between frontend and API, the database may need multiple tables to store a single shape. 
+Build the app to the `dist` directory.
 
-### 2.  DB Creation and Migrations
+`npm run dev` <br>
 
-Now that you have the structure of the databse outlined, it is time to create the database and migrations. Add the npm packages dotenv and db-migrate that we used in the course and setup your Postgres database. If you get stuck, you can always revisit the database lesson for a reminder. 
+Excute the up migrations in the development database and run the development server.
 
-You must also ensure that any sensitive information is hashed with bcrypt. If any passwords are found in plain text in your application it will not pass.
+`npm run migrate-up` <br>
 
-### 3. Models
+Excute the up migrations in the development database.
 
-Create the models for each database table. The methods in each model should map to the endpoints in `REQUIREMENTS.md`. Remember that these models should all have test suites and mocks.
+`npm run migrate-down` <br>
 
-### 4. Express Handlers
+Excute all the down migrations in the development database.
 
-Set up the Express handlers to route incoming requests to the correct model method. Make sure that the endpoints you create match up with the enpoints listed in `REQUIREMENTS.md`. Endpoints must have tests and be CORS enabled. 
+`npm run test` <br>
 
-### 5. JWTs
+Set the test environment, excute the up migrations in the test database, run the unit tests then excute the down migrations in the test database.
 
-Add JWT functionality as shown in the course. Make sure that JWTs are required for the routes listed in `REQUIUREMENTS.md`.
+`npm run prettier`  <br>
 
-### 6. QA and `README.md`
+Format code.
 
-Before submitting, make sure that your project is complete with a `README.md`. Your `README.md` must include instructions for setting up and running your project including how you setup, run, and connect to your database. 
+`npm run lint`  <br>
 
-Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
+Lint code.
+
+
+## API Documentation
+
+#### Authentication Requirments
+In order to access the **private endpoints**, you must send the request with your access token in the authentication header.
+```
+Authentication: Bearer {token}
+```
+You can get your token from the response body of [POST /users](#post-users).
+
+### Users
+#### GET /users [Private]
+return a list of users.
+##### Response example
+```
+{
+  "data": [
+    {
+      "id": 1,
+      "first_name": "foo1",
+      "last_name": "bar1"
+    },
+    {
+      "id": 2,
+      "first_name": "foo2",
+      "last_name": "bar2"
+    },
+    {
+      "id": 3,
+      "first_name": "foo3",
+      "last_name": "bar3"
+    }
+  ]
+}
+```
+#### <a name="post-users">POST /users</a>
+create a new user. <br>
+**note:** after creating a new user, a new order will be created for him automatically.
+##### Request example
+```
+{
+  "first_name": "foo",
+  "last_name": "bar",
+  "password": "password123"
+}
+```
+##### Response example
+```
+{
+  "data": {
+    "id": 1,
+    "first_name": "foo",
+    "last_name": "bar"
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjYyODgwNjc0fQ.6LPvbTb0dAfE-CD-Z6KB5XZaQCcSAWn8DaWkFNlhdk4"
+}
+```
+#### GET /users/{user_id} [Private]
+return the user with the provided `user_id` if exists.
+##### Response example
+```
+{
+  "data": {
+    "id": 1,
+    "first_name": "foo",
+    "last_name": "bar"
+  }
+}
+```
+### Products
+#### GET /products
+return a list of products.
+##### Query parameters
+`category` (optional) : product category (e.g. "food","fishing") <br>
+return products of the given category only.
+##### Response example
+```
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "fishing rod",
+      "price": 10,
+      "category": "fishing"
+    },
+    {
+      "id": 2,
+      "name": "noodles",
+      "price": 5,
+      "category": "food"
+    },
+    {
+      "id": 3,
+      "name": "drawing pencil",
+      "price": 3,
+      "category": "art"
+    }
+  ]
+}
+```
+#### POST /products [Private]
+create a new product.
+##### Request example
+```
+{
+  "name": "fishing rod",
+  "price": "10",
+  "category": "fishing"
+}
+```
+##### Response example
+```
+{
+  "data": {
+    "id": 1,
+    "name": "fishing rod",
+    "price": 10,
+    "category": "fishing"
+  }
+}
+```
+#### GET /products/{product_id} 
+return the product with the provided `product_id` if exists.
+##### Response example
+```
+{
+  "data": {
+    "id": 1,
+    "name": "fishing rod",
+    "price": 100,
+    "category": "fishing"
+  }
+}
+```
+#### GET /products/top
+return a list of the top 5 most popular products.
+##### Response example
+```
+{
+  "data": [
+    {
+      "product_id": 2,
+      "name": "noodles",
+      "category": "food",
+      "price": 5,
+      "sold_quantity": 13
+    },
+    {
+      "product_id": 1,
+      "name": "fishing rod",
+      "category": "fishing",
+      "price": 10,
+      "sold_quantity": 8
+    },
+    {
+      "product_id": 3,
+      "name": "drawing pencil",
+      "category": "art",
+      "price": 3,
+      "sold_quantity": 5
+    }
+  ]
+}
+```
+### Orders
+#### GET /orders [Private]
+return a list of all orders made by the user.
+##### Query parameters
+`status` (optional) : order status ("completed" or "active")<br>
+**completed** to return the completed orders only. <br>
+**active** to return the current (active) order.
+##### Response example
+```
+{
+  "data": [
+    {
+      "order_id": 3,
+      "status": "active",
+      "products": [
+        {
+          "product_id": 2,
+          "product_name": "noodles",
+          "product_category": "food",
+          "product_price": 5,
+          "quantity": 2
+        }
+      ]
+    },{
+      "order_id": 1,
+      "status": "completed",
+      "products": [
+        {
+          "product_id": 1,
+          "product_name": "fishing rod",
+          "product_category": "fishing",
+          "product_price": 10,
+          "quantity": 1
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### POST /orders/products [Private]
+add a product to your current order.
+##### Request example
+```
+{
+  "product_id": "1",
+  "quantity": "2"
+}
+```
+##### Response example
+```
+{
+  "data": {
+    "order_id": 3,
+    "products": [
+      {
+        "product_id": 1,
+        "product_name": "fishing rod",
+        "product_category": "fishing",
+        "product_price": 10,
+        "quantity": 2
+      }
+    ]
+  }
+}
+```
+#### PATCH /orders/complete [Private]
+change the order status from active to completed. <br>
+**note:** after completing the order, a new active order will be created automatically.
+##### Response example
+```
+{
+  "data": {
+    "order_id": 3,
+    "status": "completed",
+    "products": [
+      {
+        "product_id": 1,
+        "product_name": "fishing rod",
+        "product_category": "fishing",
+        "product_price": 10,
+        "quantity": 2
+      }
+    ]
+  }
+}
+```
