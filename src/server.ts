@@ -5,7 +5,6 @@ import bodyParser from "body-parser";
 import usersRoute from "./routes/users.route";
 import productsRoute from "./routes/products.route";
 import OrdersRoute from "./routes/orders.route";
-import ServicesRoute from "./routes/services.route";
 
 const app: express.Application = express();
 const address = "0.0.0.0:3000";
@@ -24,6 +23,9 @@ app.listen(3000, function () {
 app.use("/users", usersRoute);
 app.use("/products", productsRoute);
 app.use("/orders", OrdersRoute);
-app.use("/", ServicesRoute);
 
+//invalid routes
+app.use("*",(_req:Request,res:Response)=>{
+    res.status(404).json({error:"Not Found"})
+})
 export default app;
