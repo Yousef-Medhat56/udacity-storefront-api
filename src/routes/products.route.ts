@@ -27,6 +27,10 @@ router.post(
 //get all the products
 router.get("/", controller.index);
 
+// get top 5 most popular products
+router.get("/top", controller.getTopProducts);
+
 // get a specific product by id
 router.get("/:id", idParamValidationRules(), validate, controller.show);
+
 export default router;

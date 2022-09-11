@@ -24,10 +24,11 @@ class OrdersController {
             const productIds = await services.getProductIdsBtOrderId(order_id);
 
             //check if the user has ordered this product before or not
-            const isOrderedProduct = productIds.includes(product_id);
+            const isOrderedProduct = productIds.includes(parseInt(product_id));
 
             //if the user has already ordered the product
             if (isOrderedProduct) {
+                
                 await services.updateProductOrder(productOrderRecord);
             }
             //if the user order the product for the first time
@@ -52,6 +53,40 @@ class OrdersController {
         const status = req.query.status as string;
         const data = await services.getOrdersByStatus(user_id, status);
         res.json({ data });
+    }
+
+    async completeOrder(_req: Request, res: Response) {
+        //user id
+        const { user_id } = res.locals;
+        //order id
+        const order_id = await services.getOrderIdByUserId(user_id);
+
+        //get products in order
+        const productsInOrder = await services.getProductsInOrder(
+            order_id as number
+        );
+
+        //if the order contains products
+        if (productsInOrder.length) {
+            //complete the order (change order status to "completed")
+            await services.completeOrder(user_id);
+
+            //create new active order
+            await services.create(user_id);
+            res.json({
+                data: {
+                    order_id,
+                    status: "completed",
+                    products: productsInOrder,
+                },
+            });
+        }
+        // if the order doesn't contain products
+        else {
+            res.status(400).json({
+                error: "you haven't ordered any products yet",
+            });
+        }
     }
 }
 

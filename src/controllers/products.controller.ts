@@ -51,6 +51,12 @@ class ProductsController {
             res.status(500).json({ error: "Internal Server Error" });
         }
     }
+
+    //get top 5 most popular products
+    async getTopProducts(_req: Request, res: Response) {
+        const data = await services.getTop5Products();
+        res.json({ data });
+    }
 }
 
 export default ProductsController;

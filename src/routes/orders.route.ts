@@ -15,14 +15,18 @@ const router = Router();
 //orders controller
 const controller = new OrdersController();
 
-//add a record in the products_orders table
-router.put(
-    "/",
+//get orders
+router.get("/", verifyToken, controller.getOrders);
+
+//add a product to the current order
+router.post(
+    "/products",
     verifyToken,
     orderValidationRules(),
     validate,
     controller.addProductToOrder
 );
 
-router.get("/", verifyToken, controller.getOrders);
+//change order status to complete
+router.patch("/complete",verifyToken,controller.completeOrder)
 export default router;
