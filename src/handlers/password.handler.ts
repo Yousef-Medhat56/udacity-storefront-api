@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default class PasswordHandler {
-    private pepper: string | undefined = process.env.BCRYPT_PASSWORD;
+    private pepper: string | undefined = process.env.PASSOWRD_PEPPER;
     private salt: number | undefined = parseInt(
         process.env.SALT_ROUNDS as string
     );

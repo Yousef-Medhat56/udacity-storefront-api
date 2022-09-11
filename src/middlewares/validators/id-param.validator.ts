@@ -3,7 +3,7 @@
 import { param } from "express-validator";
 
 const idParamValidationRules = () => {
-    return [param("id").isInt()];
+    return [param("id").isInt({min:1})];
 };
 
 export default idParamValidationRules;
